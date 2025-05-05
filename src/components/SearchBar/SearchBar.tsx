@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import s from './SearchBar.module.css';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 
-const SearchBar = ({ onSubmit }) => {
-  const [input, setInput] = useState('');
+interface SearchBarProps {
+  onSubmit: (query: string) => void;
+}
 
-  const handleSubmit = event => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
+  const [input, setInput] = useState<string>('');
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (input.trim() === '') {
       toast.error('Please enter a search term');
@@ -16,7 +20,7 @@ const SearchBar = ({ onSubmit }) => {
     setInput('');
   };
 
-  const handleChange = event => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
   };
 

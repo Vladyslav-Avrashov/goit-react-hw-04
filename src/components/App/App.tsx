@@ -5,19 +5,20 @@ import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import ImageModal from '../ImageModal/ImageModal';
-import { searchImages } from '..//../api/unsplash';
+import { searchImages, UnsplashImage } from '../../api/unsplash';
 import { Toaster } from 'react-hot-toast';
 
-const App = () => {
-  const [query, setQuery] = useState('');
-  const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [modalData, setModalData] = useState(null);
+const App: React.FC = () => {
+  const [query, setQuery] = useState<string>('');
+  const [images, setImages] = useState<UnsplashImage[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [modalData, setModalData] = useState<UnsplashImage | null>(null);
 
   useEffect(() => {
     if (!query) return;
+
     const fetchImages = async () => {
       setLoading(true);
       setError(null);
@@ -27,7 +28,6 @@ const App = () => {
           page === 1 ? data.results : [...prev, ...data.results]
         );
       } catch (error) {
-        console.log(error);
         setError('Something went wrong. Please try again.');
       } finally {
         setLoading(false);
@@ -41,19 +41,18 @@ const App = () => {
         }
       }
     };
+
     fetchImages();
   }, [query, page]);
 
-  const handleSearch = newQuery => {
+  const handleSearch = (newQuery: string) => {
     setQuery(newQuery);
     setPage(1);
     setImages([]);
   };
 
   const loadMore = () => setPage(prev => prev + 1);
-
-  const openModal = data => setModalData(data);
-
+  const openModal = (data: UnsplashImage) => setModalData(data);
   const closeModal = () => setModalData(null);
 
   return (
